@@ -244,6 +244,8 @@ export class SubscriptionClaudeProvider implements ClaudeProvider {
       gate.send(userMessage(flattenConversation(request)));
       return await this.collect(session, controller, started);
     } catch (error) {
+      // A timeout or cancellation surfaces as the stream ending early; report the real reason.
+      if (reason) throw aborted();
       if (error instanceof ClaudeError) throw error;
       if (controller.signal.aborted) throw aborted();
       const message = this.safeMessage(error);
@@ -266,8 +268,23 @@ export class SubscriptionClaudeProvider implements ClaudeProvider {
     started: number,
   ): Promise<ClaudeResponse> {
     let model = this.deps.config.model ?? "claude";
+    const seen: string[] = [];
     for await (const message of session as AsyncIterable<SDKMessage>) {
       if (controller.signal.aborted) break;
+      const label =
+        "subtype" in message && typeof message.subtype === "string"
+          ? `${message.type}/${message.subtype}`
+          : message.type;
+      seen.push(label);
+      if (this.deps.config.debug) {
+        const stop =
+          message.type === "assistant"
+            ? ` stop=${String(message.message.stop_reason)}${message.error ? ` error=${message.error}` : ""}`
+            : "";
+        this.deps.log?.(
+          `+${Math.round((this.deps.now ?? Date.now)() - started)}ms ${label}${stop}`,
+        );
+      }
       switch (message.type) {
         case "system":
           if (message.subtype === "init") {
@@ -321,7 +338,11 @@ export class SubscriptionClaudeProvider implements ClaudeProvider {
           );
       }
     }
-    throw new ClaudeError("request-failed", "Claude ended the session without a result.");
+    if (controller.signal.aborted) throw new Error("aborted");
+    throw new ClaudeError(
+      "request-failed",
+      `Claude ended the session without a result (after ${seen.length} messages${seen.length ? `, last: ${seen.slice(-3).join(", ")}` : ""}).`,
+    );
   }
 
   private options(controller: AbortController, systemPrompt: string): Options {

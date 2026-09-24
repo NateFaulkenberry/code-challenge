@@ -11,6 +11,11 @@ export interface FakeScript {
   messages?: object[];
   /** Never produce a result (until aborted). */
   hang?: boolean;
+  /**
+   * How the stream reacts to an abort while hanging. The real SDK ends the
+   * stream quietly ("end"); "throw" models an iterator error.
+   */
+  onAbort?: "end" | "throw";
   iterateError?: Error;
 }
 
@@ -74,7 +79,10 @@ export function fakeSdk(script: FakeScript): FakeSdk {
           if (script.iterateError) throw script.iterateError;
           for (const message of script.messages ?? [initMessage(), successResult("ok")])
             yield message as SDKMessage;
-          if (script.hang) await untilAborted();
+          if (script.hang) {
+            if (script.onAbort === "throw") await untilAborted();
+            else await untilAborted().catch(() => undefined); // ends quietly, like the real SDK
+          }
         },
       };
     },

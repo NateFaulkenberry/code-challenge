@@ -250,7 +250,10 @@ describe("SubscriptionClaudeProvider.run", () => {
   });
 
   it("times out", async () => {
-    const { provider } = setup({ messages: [initMessage()], hang: true }, { timeoutMs: 30 });
+    const { provider } = setup(
+      { messages: [initMessage()], hang: true, onAbort: "throw" },
+      { timeoutMs: 30 },
+    );
     await expectClaudeError(provider.run(request), "timeout");
   });
 
@@ -264,6 +267,35 @@ describe("SubscriptionClaudeProvider.run", () => {
     const early = new AbortController();
     early.abort();
     await expectClaudeError(provider.run(request, early.signal), "cancelled");
+  });
+
+  it("reports a timeout — not 'ended without a result' — when the stream ends quietly on abort (regression)", async () => {
+    const { provider } = setup(
+      {
+        messages: [initMessage(), { type: "system", subtype: "thinking_tokens" }],
+        hang: true,
+        onAbort: "end",
+      },
+      { timeoutMs: 30 },
+    );
+    const error = await expectClaudeError(provider.run(request), "timeout");
+    expect(error.message).not.toContain("without a result");
+  });
+
+  it("reports cancellation when the stream ends quietly on abort (regression)", async () => {
+    const { provider } = setup({ messages: [initMessage()], hang: true, onAbort: "end" });
+    const controller = new AbortController();
+    const pending = provider.run(request, controller.signal);
+    setTimeout(() => controller.abort(), 10);
+    await expectClaudeError(pending, "cancelled");
+  });
+
+  it("describes what it saw when a session genuinely ends without a result", async () => {
+    const { provider } = setup({
+      messages: [initMessage(), { type: "system", subtype: "thinking_tokens" }],
+    });
+    const error = await expectClaudeError(provider.run(request), "request-failed");
+    expect(error.message).toContain("last: system/init, system/thinking_tokens");
   });
 
   it("validates the request shape", async () => {

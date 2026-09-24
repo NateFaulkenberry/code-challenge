@@ -6,6 +6,7 @@ describe("readClaudeConfig", () => {
     expect(readClaudeConfig({})).toEqual({
       provider: "disabled",
       timeoutMs: DEFAULT_TIMEOUT_MS,
+      debug: false,
       problems: [],
     });
   });

@@ -75,11 +75,12 @@ npm run dev:claude       # = CLAUDE_PROVIDER=subscription npm run dev
 
 Open http://localhost:5173 and go to **Settings → Challenge generation → Provider → Claude — Local Only**. The panel shows the status, and the header shows **Claude — Local Only · Claude Max** when ready.
 
-| Variable            | Values                          | Default               |
-| ------------------- | ------------------------------- | --------------------- |
-| `CLAUDE_PROVIDER`   | `subscription`, `disabled`      | `disabled`            |
-| `CLAUDE_MODEL`      | a Claude Code model id or alias | Claude Code's default |
-| `CLAUDE_TIMEOUT_MS` | 5000–600000                     | 180000                |
+| Variable            | Values                                               | Default               |
+| ------------------- | ---------------------------------------------------- | --------------------- |
+| `CLAUDE_PROVIDER`   | `subscription`, `disabled`                           | `disabled`            |
+| `CLAUDE_MODEL`      | a Claude Code model id or alias                      | Claude Code's default |
+| `CLAUDE_TIMEOUT_MS` | 5000–600000                                          | 480000 (8 min)        |
+| `CLAUDE_DEBUG`      | `1` to log message types and timings (never content) | off                   |
 
 Any other `CLAUDE_PROVIDER` value (including `api`) leaves the integration disabled, and the reason shows in the status.
 
@@ -113,6 +114,11 @@ If you'd rather not create a token, run `npm run dev:claude` on the host instead
   - that production can't create the provider.
 - **`npm run check:bundle`** (also run in CI and before every deploy) scans the production build for credential shapes, serialized OAuth state, Claude credential-store references, the local endpoint, and Agent SDK code.
 - **`npm run claude:test`** is the **optional, manual** live test. It sends one tiny real request ("reply with exactly `CLAUDE_LOCAL_OK`"), which uses a small amount of your plan's usage. It is never part of `npm test` or CI.
+
+### Troubleshooting
+
+- **Generation is slow or times out.** One full challenge attempt with extended thinking takes about 2–3 minutes: roughly 110 s thinking plus 50 s writing the JSON. Validation can trigger a repair attempt, which adds another request. The default per-request timeout is 8 minutes. Raise `CLAUDE_TIMEOUT_MS` (up to 600000) if needed, or set `CLAUDE_MODEL` to a faster model.
+- **See what Claude is doing.** Start with `CLAUDE_DEBUG=1` (for example `CLAUDE_DEBUG=1 docker compose up`). The dev server then logs each message type with its elapsed time, such as `+90316ms system/thinking_tokens` or `+156743ms result/success`. Prompts and responses are never logged.
 
 ## 9. Disabling it
 

@@ -4,11 +4,18 @@ export interface ClaudeConfig {
   provider: ClaudeProviderKind;
   model?: string;
   timeoutMs: number;
+  /** CLAUDE_DEBUG=1: log message types and timings (never content). */
+  debug: boolean;
   /** Configuration mistakes, reported through status instead of crashing the dev server. */
   problems: string[];
 }
 
-export const DEFAULT_TIMEOUT_MS = 180_000;
+/**
+ * Generating a full challenge with extended thinking measured ~160 s for a
+ * single attempt (≈110 s thinking + ≈50 s output), so the default leaves ample
+ * headroom. (A 180 s default timed out real generations.)
+ */
+export const DEFAULT_TIMEOUT_MS = 480_000;
 
 /**
  * Reads the local Claude configuration from the environment.
@@ -16,6 +23,7 @@ export const DEFAULT_TIMEOUT_MS = 180_000;
  *   CLAUDE_PROVIDER    disabled (default) | subscription
  *   CLAUDE_MODEL       optional model id/alias for Claude Code (default: its own default)
  *   CLAUDE_TIMEOUT_MS  optional request timeout, 5000–600000
+ *   CLAUDE_DEBUG       1 to log message types and timings (never content)
  *
  * Safe by default: anything unrecognised resolves to "disabled". There is
  * deliberately no API-key provider here — API keys are handled by the app's
@@ -55,5 +63,6 @@ export function readClaudeConfig(env: Record<string, string | undefined>): Claud
       );
   }
 
-  return { provider, ...(model ? { model } : {}), timeoutMs, problems };
+  const debug = env.CLAUDE_DEBUG === "1" || env.CLAUDE_DEBUG === "true";
+  return { provider, ...(model ? { model } : {}), timeoutMs, debug, problems };
 }

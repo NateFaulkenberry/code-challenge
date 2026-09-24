@@ -22,6 +22,8 @@ services:
       - CLAUDE_PROVIDER=${CLAUDE_PROVIDER:-disabled}
       - CLAUDE_CODE_OAUTH_TOKEN=${CLAUDE_CODE_OAUTH_TOKEN:-}
       - CLAUDE_MODEL=${CLAUDE_MODEL:-}
+      - CLAUDE_TIMEOUT_MS=${CLAUDE_TIMEOUT_MS:-}
+      - CLAUDE_DEBUG=${CLAUDE_DEBUG:-}
 
   # Browser tests in Microsoft's Playwright image (browsers preinstalled).
   #   docker compose run --rm e2e
