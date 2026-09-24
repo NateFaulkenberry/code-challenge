@@ -5,3 +5,5 @@ package-lock.json
 public/runtimes
 playwright-report
 test-results
+# Committed exactly as exported from the app (Settings → Data → Export portfolio)
+public/portfolio/portfolio.json
