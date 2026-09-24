@@ -2,6 +2,138 @@
   "format": "coding-challenge-portfolio",
   "version": 1,
   "kind": "portfolio",
-  "exportedAt": "2026-09-24T00:00:00.000Z",
-  "attempts": []
+  "exportedAt": "2026-09-24T13:12:32.940Z",
+  "attempts": [
+    {
+      "schemaVersion": 1,
+      "id": "fixture-typescript-beginner-normalize-article-tags",
+      "challenge": {
+        "title": "Normalize Article Tags",
+        "language": "typescript",
+        "difficulty": "beginner",
+        "category": "algorithms",
+        "archetype": "data-transformation",
+        "summary": "Clean up user-entered tags before they are stored: trim, lowercase, dedupe and sort.",
+        "problemStatement": "Authors type tags for their articles in a free-form input. Before the tags are saved, they need to be normalized so that `\"React \"`, `\"react\"` and `\" REACT\"` are treated as the same tag.\n\nImplement `normalizeTags(tags)` which returns a new array of normalized tags.",
+        "realWorldContext": "Content platforms normalize tags so search, filtering and tag clouds don't fragment across spelling variants.",
+        "requirements": [
+          "Trim surrounding whitespace and lowercase each tag.",
+          "Collapse internal runs of whitespace into a single hyphen (`\"state  management\"` → `\"state-management\"`).",
+          "Drop tags that are empty after trimming.",
+          "Remove duplicates and return the tags sorted alphabetically.",
+          "Do not mutate the input array."
+        ],
+        "constraints": [
+          "The input may contain up to 1,000 tags."
+        ],
+        "starterCode": "export function normalizeTags(tags: string[]): string[] {\n  // TODO: implement\n  return tags;\n}\n",
+        "referenceSolution": "export function normalizeTags(tags: string[]): string[] {\n  const normalized = tags\n    .map((tag) => tag.trim().toLowerCase().replace(/\\s+/g, \"-\"))\n    .filter((tag) => tag.length > 0);\n  return [...new Set(normalized)].sort();\n}\n",
+        "explanation": "Map each tag through the normalization steps, filter out empties, then use a `Set` to dedupe before sorting. Creating a new array via `map` keeps the input untouched.",
+        "complexity": {
+          "time": "O(n log n)",
+          "space": "O(n)"
+        },
+        "tests": {
+          "prelude": "import { normalizeTags } from \"./solution\";",
+          "cases": [
+            {
+              "id": "trims-and-lowercases",
+              "name": "trims and lowercases",
+              "hidden": false,
+              "code": "expect(normalizeTags([\"  React \", \"TypeScript\"])).toEqual([\"react\", \"typescript\"]);"
+            },
+            {
+              "id": "dedupes",
+              "name": "removes duplicates after normalization",
+              "hidden": false,
+              "code": "expect(normalizeTags([\"react\", \"React \", \" REACT\"])).toEqual([\"react\"]);"
+            },
+            {
+              "id": "hyphenates-whitespace",
+              "name": "hyphenates internal whitespace",
+              "hidden": false,
+              "code": "expect(normalizeTags([\"state   management\"])).toEqual([\"state-management\"]);"
+            },
+            {
+              "id": "drops-empty",
+              "name": "drops empty tags",
+              "hidden": true,
+              "code": "expect(normalizeTags([\"\", \"   \", \"css\"])).toEqual([\"css\"]);"
+            },
+            {
+              "id": "does-not-mutate",
+              "name": "does not mutate the input",
+              "hidden": true,
+              "code": "const input = [\"B\", \"a\"];\nnormalizeTags(input);\nexpect(input).toEqual([\"B\", \"a\"]);"
+            }
+          ]
+        },
+        "expectedConcepts": [
+          "array methods",
+          "Set",
+          "string normalization",
+          "immutability"
+        ],
+        "estimatedTimeMinutes": 10,
+        "schemaVersion": 1,
+        "id": "fixture-typescript-beginner-normalize-article-tags",
+        "slug": "normalize-article-tags",
+        "fingerprint": "lang:typescript arch:data-transformation t:normalize t:article t:tags after alphabetically array articl author before collapse drop duplicat empty form free hyphen input internal lowercase management mutate need new normaliz normalizetag not react remove runs same saved single sort state surround tag tags treat trim trimm type whitespace",
+        "provenance": {
+          "source": "fixture",
+          "generatorVersion": "fixture-v1",
+          "generatedAt": "2026-09-01T00:00:00.000Z"
+        }
+      },
+      "status": "passed",
+      "solution": "export function normalizeTags(tags: string[]): string[] {\n  const cleanTags = tags.map((tag: string) => {\n    const t = tag.trim().toLowerCase().replace(/  +/g, '-')\n    if (!t || t === \"-\") return null\n    return t\n  }).filter((tag: string) => {\n    return tag  \n  }).sort()\n  \n  const dedupTags = new Set(cleanTags)\n  return [...dedupTags]\n  \n}",
+      "approachNotes": "",
+      "testRunCount": 3,
+      "referenceRevealed": true,
+      "createdAt": "2026-09-24T12:36:34.704Z",
+      "updatedAt": "2026-09-24T13:07:02.600Z",
+      "lastTestRun": {
+        "execution": {
+          "status": "success",
+          "stdout": "",
+          "stderr": "",
+          "exitCode": 0,
+          "durationMs": 3,
+          "truncated": false,
+          "diagnostics": []
+        },
+        "results": [
+          {
+            "id": "trims-and-lowercases",
+            "status": "pass",
+            "durationMs": 0.09999999403953552
+          },
+          {
+            "id": "dedupes",
+            "status": "pass",
+            "durationMs": 0.20000000298023224
+          },
+          {
+            "id": "hyphenates-whitespace",
+            "status": "pass",
+            "durationMs": 0.09999999403953552
+          },
+          {
+            "id": "drops-empty",
+            "status": "pass",
+            "durationMs": 0
+          },
+          {
+            "id": "does-not-mutate",
+            "status": "pass",
+            "durationMs": 0.20000000298023224
+          }
+        ],
+        "includedHidden": true,
+        "finishedAt": "2026-09-24T13:06:12.033Z"
+      },
+      "passedSolution": "export function normalizeTags(tags: string[]): string[] {\n  const cleanTags = tags.map((tag: string) => {\n    const t = tag.trim().toLowerCase().replace(/  +/g, '-')\n    if (!t || t === \"-\") return null\n    return t\n  }).filter((tag: string) => {\n    return tag  \n  }).sort()\n  \n  const dedupTags = new Set(cleanTags)\n  return [...dedupTags]\n  \n}",
+      "completedAt": "2026-09-24T13:06:12.033Z"
+    }
+  ]
 }
