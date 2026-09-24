@@ -7,6 +7,7 @@ import { implementedLanguages, runtimeLoaders } from "@/runtimes/registry";
 import { AttemptStore } from "@/services/attempt-store";
 import { ExecutionService } from "@/services/execution/execution-service";
 import { createChallengeSource } from "@/services/generation/factory";
+import { LocalClaudeStatusStore } from "@/services/generation/local-claude";
 import type { ChallengeSource } from "@/services/generation/source";
 import { loadPublishedPortfolio, type PublishedPortfolio } from "@/services/portfolio/published";
 
@@ -19,6 +20,8 @@ export interface AppServices {
   storageWarning?: string;
   loadPublished: () => Promise<PublishedPortfolio>;
   createSource: (settings: Settings) => ChallengeSource;
+  /** Local Claude (dev builds only); "unsupported" in the public build. */
+  localClaude: LocalClaudeStatusStore;
 }
 
 export interface ServiceOverrides {
@@ -28,6 +31,7 @@ export interface ServiceOverrides {
   secrets?: SecretStore;
   loadPublished?: () => Promise<PublishedPortfolio>;
   createSource?: (settings: Settings) => ChallengeSource;
+  localClaude?: LocalClaudeStatusStore;
 }
 
 export async function createAppServices(overrides: ServiceOverrides = {}): Promise<AppServices> {
@@ -38,6 +42,7 @@ export async function createAppServices(overrides: ServiceOverrides = {}): Promi
   await attempts.load();
   const execution = overrides.execution ?? new ExecutionService(runtimeLoaders());
   const secrets = overrides.secrets ?? new SecretStore();
+  const localClaude = overrides.localClaude ?? new LocalClaudeStatusStore();
 
   const createSource =
     overrides.createSource ??
@@ -60,6 +65,7 @@ export async function createAppServices(overrides: ServiceOverrides = {}): Promi
               })),
           ),
         prepareRuntime: (language) => execution.prepare(language),
+        localClaude: () => localClaude.getSnapshot(),
       }));
 
   return {
@@ -70,5 +76,6 @@ export async function createAppServices(overrides: ServiceOverrides = {}): Promi
     ...(opened.warning ? { storageWarning: opened.warning } : {}),
     loadPublished: overrides.loadPublished ?? (() => loadPublishedPortfolio()),
     createSource,
+    localClaude,
   };
 }

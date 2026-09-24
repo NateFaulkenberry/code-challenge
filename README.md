@@ -21,6 +21,7 @@ TypeScript · React · Python · PHP · C · C++ run client-side (Web Workers, W
 
 - **No setup needed:** the site starts in _sample mode_, which uses a small bundled set of challenges (one per language) so every runtime can be tried offline.
 - **Unlimited generation:** add an Anthropic API key in **Settings**. The key stays in your browser; see [Security](docs/security.md) for what that means.
+- **Local only — Claude subscription:** when running the app locally, `npm run dev:claude` adds a **Claude — Local Only** provider that uses your own Claude Pro/Max subscription through the official Claude Agent SDK, with no API key. It isn't part of the public site. See [docs/local-claude.md](docs/local-claude.md).
 
 ## Architecture at a glance
 
@@ -97,4 +98,4 @@ GitHub Actions runs format, typecheck, lint and tests, then builds and runs E2E.
 
 ## Documentation
 
-[Architecture](docs/architecture.md) · [Research report](docs/research.md) · [Runtimes](docs/runtimes.md) · [Challenge generation](docs/challenge-generation.md) · [Security](docs/security.md) · [Testing](docs/testing.md) · [Development](docs/development.md) · [Deployment](docs/deployment.md) · [ADRs](docs/adr/)
+[Architecture](docs/architecture.md) · [Research report](docs/research.md) · [Runtimes](docs/runtimes.md) · [Challenge generation](docs/challenge-generation.md) · [Security](docs/security.md) · [Testing](docs/testing.md) · [Development](docs/development.md) · [Deployment](docs/deployment.md) · [Local Claude](docs/local-claude.md) · [ADRs](docs/adr/)

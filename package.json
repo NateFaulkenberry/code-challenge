@@ -10,6 +10,7 @@
   "scripts": {
     "predev": "node scripts/copy-runtime-assets.mjs",
     "dev": "vite",
+    "dev:claude": "CLAUDE_PROVIDER=subscription npm run dev",
     "prebuild": "node scripts/copy-runtime-assets.mjs",
     "build": "vite build && vite build --config vite.sandbox.config.ts",
     "preview": "vite preview",
@@ -19,7 +20,13 @@
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "check:bundle": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/check-bundle.ts dist",
+    "claude:check": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/claude-check.ts",
+    "claude:setup": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/claude-setup.ts",
+    "claude:login": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/claude-cli.ts login",
+    "claude:token": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/claude-cli.ts token",
+    "claude:test": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/claude-test.ts"
   },
   "dependencies": {
     "@bjorn3/browser_wasi_shim": "^0.4.2",
@@ -53,6 +60,7 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.3.281",
     "@axe-core/playwright": "^4.13.0",
     "@eslint/js": "^9.39.5",
     "@php-wasm/node-8-4": "^3.1.55",

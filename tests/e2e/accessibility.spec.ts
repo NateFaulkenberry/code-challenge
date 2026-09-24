@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test, type Page } from "@playwright/test";
+import type { Page } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { generateSample, solveCurrentChallenge } from "./helpers";
 
 async function expectNoViolations(page: Page, label: string) {

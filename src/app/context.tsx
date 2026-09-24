@@ -13,6 +13,7 @@ import type { LanguageId } from "@/domain/languages";
 import type { Settings } from "@/domain/settings";
 import type { AttemptSnapshot } from "@/services/attempt-store";
 import type { RuntimeState } from "@/services/execution/execution-service";
+import type { LocalClaudeAvailability } from "@/services/generation/local-claude";
 import type { ChallengeSource } from "@/services/generation/source";
 import type { PublishedPortfolio } from "@/services/portfolio/published";
 import type { AppServices } from "./services";
@@ -45,6 +46,11 @@ export function AppProviders({
     },
     [services],
   );
+
+  // Local development only: ask the dev server whether local Claude is set up.
+  useEffect(() => {
+    void services.localClaude.refresh();
+  }, [services]);
 
   useEffect(() => {
     let cancelled = false;
@@ -136,8 +142,17 @@ export function useRuntimeState(language: LanguageId): RuntimeState {
   return useSyncExternalStore(subscribe, () => execution.state(language));
 }
 
+export function useLocalClaude(): LocalClaudeAvailability {
+  const { localClaude } = useServices();
+  return useSyncExternalStore(localClaude.subscribe, localClaude.getSnapshot);
+}
+
 export function useChallengeSource(): ChallengeSource {
   const { createSource } = useServices();
   const { settings } = useSettings();
-  return useMemo(() => createSource(settings), [createSource, settings]);
+  // Re-create when local Claude's status changes so labels and readiness stay current.
+  const localClaude = useLocalClaude();
+  // createSource reads the local Claude store; the snapshot is a deliberate dependency.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  return useMemo(() => createSource(settings), [createSource, settings, localClaude]);
 }

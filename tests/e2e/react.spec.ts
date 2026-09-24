@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { generateSample, solveCurrentChallenge } from "./helpers";
 
 test("react: interactive sandboxed preview and Testing Library tests", async ({ page }) => {

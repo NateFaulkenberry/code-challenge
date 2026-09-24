@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { generateSample, replaceEditorContents, solveCurrentChallenge } from "./helpers";
 
 // First use downloads ~100 MB of LLVM; allow for it.

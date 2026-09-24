@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { generateSample, replaceEditorContents, solveCurrentChallenge } from "./helpers";
 
 test("python: Pyodide worker runs code and tests in the browser", async ({ page }) => {

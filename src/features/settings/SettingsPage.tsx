@@ -5,6 +5,8 @@ import { Field, fieldStyles, SelectField } from "@/components/Field";
 import { Notice } from "@/components/Notice";
 import { ANTHROPIC_MODELS, type ProviderId, type Settings } from "@/domain/settings";
 import { maskSecret } from "@/persistence/settings-store";
+import { LOCAL_CLAUDE_LABEL, LOCAL_CLAUDE_SUPPORTED } from "@/services/generation/local-claude";
+import { LocalClaudePanel } from "./LocalClaudePanel";
 import { DataSection } from "./DataSection";
 import styles from "./SettingsPage.module.css";
 
@@ -12,6 +14,15 @@ const PROVIDER_OPTIONS: { value: ProviderId; label: string }[] = [
   { value: "fixtures", label: "Sample challenges (offline, no key)" },
   { value: "anthropic", label: "Anthropic — your own API key" },
   { value: "proxy", label: "Custom proxy endpoint" },
+  // Only offered when running the app locally; absent from the public build.
+  ...(LOCAL_CLAUDE_SUPPORTED
+    ? [
+        {
+          value: "claude-local" as const,
+          label: `${LOCAL_CLAUDE_LABEL} (your Claude subscription)`,
+        },
+      ]
+    : []),
 ];
 
 export function SettingsPage() {
@@ -113,6 +124,8 @@ export function SettingsPage() {
             />
           </Field>
         )}
+
+        {LOCAL_CLAUDE_SUPPORTED && settings.provider === "claude-local" && <LocalClaudePanel />}
 
         {settings.provider === "fixtures" && (
           <p className={styles.description}>

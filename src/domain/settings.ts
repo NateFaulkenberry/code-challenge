@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const PROVIDER_IDS = ["anthropic", "proxy", "fixtures"] as const;
+export const PROVIDER_IDS = ["anthropic", "proxy", "fixtures", "claude-local"] as const;
 export const ProviderIdSchema = z.enum(PROVIDER_IDS);
 export type ProviderId = z.infer<typeof ProviderIdSchema>;
 

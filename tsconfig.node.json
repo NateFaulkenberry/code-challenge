@@ -18,6 +18,7 @@
     "vite.sandbox.config.ts",
     "playwright.config.ts",
     "scripts",
+    "server",
     "tests/e2e"
   ]
 }

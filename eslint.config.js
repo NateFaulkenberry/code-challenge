@@ -30,6 +30,11 @@ export default tseslint.config(
     rules: { "@typescript-eslint/no-non-null-assertion": "off" },
   },
   {
+    // Command-line scripts report to the terminal by design.
+    files: ["scripts/**/*.ts"],
+    rules: { "no-console": "off" },
+  },
+  {
     files: ["**/*.js", "**/*.mjs"],
     extends: [js.configs.recommended],
     languageOptions: { globals: { ...globals.node } },

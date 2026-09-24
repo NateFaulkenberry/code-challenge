@@ -7,13 +7,16 @@
 
 ## Commands
 
-| Command                                 | Purpose                                                                           |
-| --------------------------------------- | --------------------------------------------------------------------------------- |
-| `npm run dev`                           | Dev server at http://localhost:5173 (copies runtime assets first)                 |
-| `npm test` / `npm run test:watch`       | Vitest                                                                            |
-| `npm run test:e2e`                      | Playwright (builds with `BASE_PATH=/code-challenge/`, serves with `vite preview`) |
-| `npm run build`                         | Production build: the app, plus the separate React sandbox build                  |
-| `npm run typecheck` · `lint` · `format` | TypeScript 6.0, typescript-eslint (strict, type-checked), Prettier                |
+| Command                                                                                   | Purpose                                                                                                                               |
+| ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run dev`                                                                             | Dev server at http://localhost:5173 (copies runtime assets first)                                                                     |
+| `npm test` / `npm run test:watch`                                                         | Vitest                                                                                                                                |
+| `npm run test:e2e`                                                                        | Playwright (builds with `BASE_PATH=/code-challenge/`, serves with `vite preview`)                                                     |
+| `npm run build`                                                                           | Production build: the app, plus the separate React sandbox build                                                                      |
+| `npm run dev:claude`                                                                      | Dev server with the local-only Claude integration enabled ([local-claude.md](local-claude.md))                                        |
+| `npm run claude:check` · `claude:setup` · `claude:login` · `claude:token` · `claude:test` | Local Claude status, setup guidance, Claude Code sign-in, subscription token, optional live test (uses a little of your plan's usage) |
+| `npm run check:bundle`                                                                    | Scan `dist/` for credentials and local-only code (runs in CI before deploy)                                                           |
+| `npm run typecheck` · `lint` · `format`                                                   | TypeScript 6.0, typescript-eslint (strict, type-checked), Prettier                                                                    |
 
 ## Docker
 

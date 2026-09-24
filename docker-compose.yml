@@ -7,7 +7,8 @@ services:
   app:
     build: .
     ports:
-      - "5173:5173"
+      # Loopback only: the dev server (and local Claude, when enabled) must not be reachable from the network.
+      - "127.0.0.1:5173:5173"
     volumes:
       - .:/app
       # Keep the container's Linux node_modules separate from the host's.
@@ -15,6 +16,12 @@ services:
     environment:
       # File watching through bind mounts is unreliable on macOS/Windows.
       - CHOKIDAR_USEPOLLING=true
+      # Local Claude (docs/local-claude.md). Disabled unless you opt in. The
+      # subscription token is interpolated at `docker compose up` time from your
+      # shell or the untracked .env file — it is never part of the image.
+      - CLAUDE_PROVIDER=${CLAUDE_PROVIDER:-disabled}
+      - CLAUDE_CODE_OAUTH_TOKEN=${CLAUDE_CODE_OAUTH_TOKEN:-}
+      - CLAUDE_MODEL=${CLAUDE_MODEL:-}
 
   # Browser tests in Microsoft's Playwright image (browsers preinstalled).
   #   docker compose run --rm e2e

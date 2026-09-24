@@ -46,6 +46,7 @@ jobs:
           test -f dist/index.html
           test -f dist/sandbox.html
           grep -q 'Content-Security-Policy' dist/sandbox.html
+          npm run check:bundle
       - uses: actions/upload-pages-artifact@v5
         with:
           path: dist

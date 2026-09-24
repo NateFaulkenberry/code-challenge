@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import react from "@vitejs/plugin-react";
 import { defineConfig, type Plugin } from "vite";
+import { localClaudePlugin } from "./server/claude/vite-plugin.ts";
 
 /**
  * php-wasm's loader modules `import url from "./php_8_4.wasm"`, expecting a
@@ -41,7 +42,8 @@ function packageVersion(name: string): string {
 
 export default defineConfig({
   base: normalizeBase(process.env.BASE_PATH),
-  plugins: [react(), phpWasmAssets()],
+  // localClaudePlugin is dev-server only (apply: "serve"); see docs/local-claude.md.
+  plugins: [react(), phpWasmAssets(), localClaudePlugin()],
   resolve: { alias: { "@": src } },
   define: { __CLANG_VERSION__: JSON.stringify(packageVersion("@yowasp/clang")) },
   worker: {
@@ -87,7 +89,12 @@ export default defineConfig({
           name: "unit",
           environment: "node",
           testTimeout: 20_000,
-          include: ["src/**/*.test.ts", "tests/{integration,regression,runtime}/**/*.test.ts"],
+          include: [
+            "src/**/*.test.ts",
+            "server/**/*.test.ts",
+            "scripts/**/*.test.ts",
+            "tests/{integration,regression,runtime}/**/*.test.ts",
+          ],
         },
       },
       {

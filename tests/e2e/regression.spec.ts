@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { generateSample } from "./helpers";
 
 test("regression: the workspace fits the viewport without page scrolling", async ({ page }) => {
