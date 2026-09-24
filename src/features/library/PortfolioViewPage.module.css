@@ -1,0 +1,150 @@
+.page {
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: var(--space-5) var(--space-4) var(--space-7);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.breadcrumb {
+  font-size: var(--text-sm);
+  color: var(--text-subtle);
+  display: flex;
+  gap: var(--space-2);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  align-items: flex-start;
+  margin-top: calc(-1 * var(--space-4));
+}
+
+.headerMain {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.header h1 {
+  font-size: var(--text-3xl);
+  letter-spacing: -0.025em;
+}
+
+.summary {
+  color: var(--text-muted);
+  font-size: var(--text-lg);
+  max-width: 65ch;
+}
+
+.openLink {
+  flex: none;
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.section > h2,
+.sectionHeader h2 {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-subtle);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--border);
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 1px solid var(--border);
+}
+
+.sectionHeader h2 {
+  border-bottom: 0;
+}
+
+.section h3 {
+  font-size: var(--text-sm);
+  margin-top: var(--space-2);
+}
+
+.context {
+  padding: var(--space-3) var(--space-4);
+  border-left: 3px solid var(--accent);
+  background: var(--surface);
+  color: var(--text-muted);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.list {
+  margin: 0;
+  padding-left: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.code {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  max-height: 560px;
+  display: flex;
+}
+
+.code > * {
+  flex: 1;
+}
+
+.result {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--space-4);
+  margin: 0;
+}
+
+.result dt {
+  font-size: var(--text-xs);
+  color: var(--text-subtle);
+}
+
+.result dd {
+  margin: 0;
+  font-weight: 500;
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.notesEditor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.notesActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+@media (max-width: 640px) {
+  .header {
+    flex-direction: column;
+  }
+
+  .header h1 {
+    font-size: var(--text-2xl);
+  }
+}

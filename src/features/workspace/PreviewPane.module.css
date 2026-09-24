@@ -1,0 +1,30 @@
+.pane {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  height: 100%;
+  min-height: 240px;
+}
+
+.offscreen {
+  position: fixed;
+  left: -10000px;
+  top: 0;
+  width: 800px;
+  height: 600px;
+  pointer-events: none;
+}
+
+.note {
+  font-size: var(--text-xs);
+  color: var(--text-subtle);
+}
+
+.frame {
+  flex: 1;
+  min-height: 200px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface);
+}

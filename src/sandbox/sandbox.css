@@ -1,0 +1,63 @@
+:root {
+  color-scheme: light;
+  --bg: #ffffff;
+  --text: #16191f;
+  --muted: #5b6472;
+  --border: #dde1e7;
+  --danger: #c02f2f;
+  --danger-soft: #fbe9e9;
+  --accent: #0a7a4f;
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #15181d;
+  --text: #e7e9ee;
+  --muted: #9aa3b2;
+  --border: #353b46;
+  --danger: #ff6b6b;
+  --danger-soft: #3a1d20;
+  --accent: #3ecf8e;
+}
+
+body {
+  margin: 0;
+  padding: 16px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+#preview:empty::before {
+  content: "Press Run to render your component here.";
+  color: var(--muted);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.ccl-preview-error {
+  padding: 12px;
+  border: 1px solid var(--danger);
+  border-radius: 6px;
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.ccl-preview-error pre {
+  white-space: pre-wrap;
+  margin: 8px 0 0;
+  font-size: 12px;
+}
